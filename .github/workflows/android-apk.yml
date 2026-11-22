@@ -25,6 +25,17 @@ jobs:
       - run: npm ci
       # Generate the native android/ project from the Expo config
       - run: npx expo prebuild --platform android --no-install
+      # Embed the production update channel so OTA (eas update) reaches this build deterministically
+      - name: Set OTA channel to production
+        run: |
+          python3 - <<'PY'
+          p = 'android/app/src/main/AndroidManifest.xml'
+          s = open(p).read()
+          md = '<meta-data android:name="expo.modules.updates.UPDATES_CONFIGURATION_REQUEST_HEADERS_KEY" android:value="{&quot;expo-channel-name&quot;:&quot;production&quot;}"/>'
+          assert 'UPDATES_CONFIGURATION_REQUEST_HEADERS_KEY' not in s
+          s = s.replace('</application>', md + '\n    </application>')
+          open(p, 'w').write(s)
+          PY
       # Sign with a debug-style release keystore generated in CI (personal distribution)
       - name: Generate signing keystore
         run: |
