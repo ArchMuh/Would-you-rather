@@ -17,7 +17,8 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.hairlabcairo.wyr",
-      "buildNumber": "1"
+      "buildNumber": "1",
+      "infoPlist": {}
     },
     "android": {
       "package": "com.hairlabcairo.wyr",
@@ -30,17 +31,28 @@
       "permissions": [
         "VIBRATE",
         "INTERNET",
-        "ACCESS_NETWORK_STATE"
+        "ACCESS_NETWORK_STATE",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
       ]
     },
     "runtimeVersion": "1.0.0",
     "updates": {
-      "url": "https://u.expo.dev/placeholder-project-id"
+      "enabled": true,
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/e1764bbc-1025-4e0b-9d46-3355e6217eed"
     },
     "plugins": [
       "expo-localization",
       "expo-sharing",
       "expo-audio"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "e1764bbc-1025-4e0b-9d46-3355e6217eed"
+      }
+    }
   }
 }

@@ -1,5 +1,5 @@
 {
-  "cli": { "version": ">= 14.0.0" },
+  "cli": { "version": ">= 16.0.0" },
   "build": {
     "development": {
       "developmentClient": true,
@@ -7,8 +7,14 @@
     },
     "preview": {
       "distribution": "internal",
-      "android": { "buildType": "apk" },
-      "ios": { "simulator": false }
+      "android": { "buildType": "apk" }
+    },
+    "ios-unsigned": {
+      "distribution": "internal",
+      "ios": {
+        "withoutCredentials": true,
+        "config": "ios-unsigned.yml"
+      }
     },
     "production": {
       "android": { "buildType": "apk" },

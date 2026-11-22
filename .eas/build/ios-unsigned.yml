@@ -1,0 +1,31 @@
+build:
+  name: Build unsigned iOS IPA for Sideloadly
+  steps:
+    - eas/checkout
+    - eas/install_node_modules
+    - eas/prebuild
+    - run:
+        name: Install CocoaPods
+        command: cd ios && pod install
+    - run:
+        name: Compile for iPhone without code signing
+        command: |
+          set -euo pipefail
+          WORKSPACE=$(find ios -maxdepth 1 -name '*.xcworkspace' -print -quit)
+          SCHEME=$(basename "$WORKSPACE" .xcworkspace)
+          xcodebuild \
+            -workspace "$WORKSPACE" \
+            -scheme "$SCHEME" \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath ios/build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY=""
+          APP=$(find ios/build/Build/Products -name '*.app' -path '*iphoneos*' -print -quit)
+          test -n "$APP"
+          mkdir -p ios/build/package/Payload
+          cp -R "$APP" ios/build/package/Payload/
+          (cd ios/build/package && /usr/bin/zip -qry ../would-you-rather-unsigned.ipa Payload)
+          test -s ios/build/would-you-rather-unsigned.ipa
+    - eas/find_and_upload_build_artifacts
