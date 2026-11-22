@@ -103,8 +103,10 @@ export function AnswerCard({
             revealed && isMine && styles.answerMine,
           ]}
         >
-          <View style={styles.answerBadge}>
-            <Text style={styles.answerBadgeText}>{label}</Text>
+          <View style={styles.badgeRow}>
+            <View style={styles.answerBadge}>
+              <Text style={styles.answerBadgeText}>{label}</Text>
+            </View>
           </View>
           <Text style={styles.answerText}>{text}</Text>
           {revealed && pct != null && (
@@ -192,15 +194,16 @@ const styles = StyleSheet.create({
   btnDanger: { backgroundColor: 'rgba(248,113,113,0.12)', borderWidth: 1, borderColor: colors.danger },
   btnText: { color: '#fff', fontSize: 17, fontWeight: '700' },
   answerCard: {
-    borderRadius: radius.lg, padding: spacing.lg, minHeight: 120,
-    justifyContent: 'center', borderWidth: 1, borderColor: colors.border, ...shadows.card,
+    borderRadius: radius.lg, padding: spacing.lg, minHeight: 96,
+    justifyContent: 'flex-start', borderWidth: 1, borderColor: colors.border, ...shadows.card,
   },
   answerSelected: { borderColor: '#fff', borderWidth: 2 },
   answerMine: { borderColor: colors.success, borderWidth: 2 },
+  badgeRow: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: spacing.sm },
   answerBadge: {
-    position: 'absolute', top: spacing.sm, start: spacing.sm, width: 30, height: 30, borderRadius: 15,
+    width: 28, height: 28, borderRadius: 14,
     backgroundColor: 'rgba(255,255,255,0.22)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.35)',
-    alignItems: 'center', justifyContent: 'center', zIndex: 3,
+    alignItems: 'center', justifyContent: 'center',
   },
   answerBadgeText: { color: '#fff', fontWeight: '800', fontSize: 14 },
   answerText: { color: colors.text, ...typography.bodyBold, textAlign: 'center' },

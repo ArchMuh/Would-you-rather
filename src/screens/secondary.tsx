@@ -10,6 +10,15 @@ import { ACHIEVEMENTS } from '../lib/achievements';
 import { dailyQuestion } from '../lib/questions';
 import { syncMusic, playSfx } from '../lib/sounds';
 import { ALL_QUESTIONS } from '../data/questions';
+import * as Updates from 'expo-updates';
+
+// Short OTA tag so users can confirm an update arrived (Settings screen).
+let otaTag = '';
+try {
+  otaTag = Updates.updateId ? `OTA ${Updates.updateId.slice(-6)}` : '';
+} catch {
+  otaTag = '';
+}
 import type { RootStackParamList } from '../navigation/types';
 import type { CategoryId, Question, VoteChoice } from '../types';
 
@@ -283,7 +292,7 @@ export function SettingsScreen({ navigation }: NativeStackScreenProps<RootStackP
           }
         />
         <View style={{ height: spacing.xl }} />
-        <Text style={styles.about}>{t('appName')} · {t('version')} 1.0.0</Text>
+        <Text style={styles.about}>{t('appName')} · {t('version')} 1.1.0{otaTag ? ` · ${otaTag}` : ''}</Text>
       </ScrollView>
     </Background>
   );
