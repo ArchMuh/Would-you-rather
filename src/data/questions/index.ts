@@ -1,0 +1,20 @@
+import type { Question } from '../../types';
+import { CLASSIC } from './classic';
+import { FRIENDS } from './friends';
+import { COUPLES } from './couples';
+import { DEEP } from './deep';
+import { EXTREME } from './extreme';
+import { FUNNY } from './funny';
+import { ADULT } from './adult';
+
+export const ALL_QUESTIONS: Question[] = [
+  ...CLASSIC,
+  ...FRIENDS,
+  ...COUPLES,
+  ...DEEP,
+  ...EXTREME,
+  ...FUNNY,
+  ...ADULT,
+];
+
+export const QUESTION_COUNT = ALL_QUESTIONS.length;
