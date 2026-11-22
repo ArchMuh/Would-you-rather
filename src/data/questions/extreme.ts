@@ -36,7 +36,7 @@ export const EXTREME = build('extreme', 'ex', [
   ['Spend a night in a haunted house', 'تقضي ليلة في بيت مسكون', 'Spend a night alone in a cemetery', 'تقضي ليلة لوحدك في المقابر', 4, 2, ['fear']],
   ['Be unable to show any emotion', 'متقدرش تظهر أي مشاعر', 'Feel every emotion of everyone around you', 'تحس بكل مشاعر اللي حواليك', 4, 3, ['emotions']],
   ['Have to survive one week in the desert', 'تنجو أسبوع في الصحراء', 'One week in the arctic', 'أسبوع في القطب المتجمد', 4, 2, ['survival']],
-  ['Never feel full after eating', 'ماتحسش بالشبع بعد الأكل أبدًا', 'Never feel hungry', 'ماتحسش بالجوع أبدًا', 3, 2, ['food', 'body']],
+  ['Always feel a little too hot no matter what', 'دايمًا حاسس إنك دفيان شوية مهما عملت', 'Always feel a little too cold no matter what', 'دايمًا حاسس إنك سقعان شوية مهما عملت', 3, 2, ['body']],
   ['Be able to predict disasters but never prevent them', 'تتنبأ بالكوارث بس ماتقدرش تمنعها', 'Never know but always survive them', 'ماتعرفش بس دايمًا تنجو منها', 5, 3, ['knowledge', 'fate']],
   ['Lose all your photos and videos', 'تخسر كل صورك وفيديوهاتك', 'Lose all your messages and conversations', 'تخسر كل رسايلك ومحادثاتك', 3, 2, ['memory', 'tech']],
   ['Have to wear a clown costume for a month', 'تلبس بدلة مهرج لمدة شهر', 'Wear a formal suit for a year', 'تلبس بدلة رسمية لمدة سنة', 2, 1, ['style', 'embarrassing']],
