@@ -21,6 +21,12 @@ jobs:
       - run: npm ci
       # Generate the native ios/ project from the Expo config
       - run: npx expo prebuild --platform ios --no-install
+      # Embed the production update channel so OTA (eas update) reaches this build deterministically
+      - name: Set OTA channel to production
+        run: |
+          PLIST=$(find ios -name Expo.plist -path '*Supporting*' -print -quit)
+          /usr/libexec/PlistBuddy -c "Add :EXUpdatesRequestHeaders dict" "$PLIST" 2>/dev/null || true
+          /usr/libexec/PlistBuddy -c "Add :EXUpdatesRequestHeaders:expo-channel-name string production" "$PLIST"
       - name: Install CocoaPods
         working-directory: ios
         run: pod install
