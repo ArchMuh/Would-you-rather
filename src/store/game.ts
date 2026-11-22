@@ -12,6 +12,7 @@ interface GameState {
   solo: boolean;
   currentPlayerIdx: number;
   votes: Vote[]; // votes for the current round
+  history: Vote[][]; // every round's votes, for end-of-game matchmaking
   phase: LocalPhase;
   skips: number;
   shownAt: number;
@@ -20,6 +21,7 @@ interface GameState {
   castVote: (choice: VoteChoice) => void;
   reveal: () => void;
   next: () => void;
+  archiveRound: () => void; // stash the final round's votes before leaving to GameOver
   skipQuestion: () => void;
   reset: () => void;
 }
@@ -33,6 +35,7 @@ export const useGame = create<GameState>((set, get) => ({
   solo: false,
   currentPlayerIdx: 0,
   votes: [],
+  history: [],
   phase: 'vote',
   skips: 0,
   shownAt: Date.now(),
@@ -40,7 +43,7 @@ export const useGame = create<GameState>((set, get) => ({
   startSession: ({ mode, kind, deck, players }) =>
     set({
       mode, kind, deck, players,
-      index: 0, votes: [], skips: 0,
+      index: 0, votes: [], history: [], skips: 0,
       solo: players.length <= 1,
       currentPlayerIdx: 0,
       phase: players.length <= 1 ? 'vote' : 'pass',
@@ -66,12 +69,19 @@ export const useGame = create<GameState>((set, get) => ({
 
   reveal: () => set({ phase: 'reveal' }),
 
+  archiveRound: () => {
+    const s = get();
+    if (s.votes.length === 0) return;
+    set({ history: [...s.history, s.votes] });
+  },
+
   next: () => {
     const s = get();
     if (s.index + 1 >= s.deck.length) return;
     set({
       index: s.index + 1,
       votes: [],
+      history: s.votes.length > 0 ? [...s.history, s.votes] : s.history,
       currentPlayerIdx: 0,
       phase: s.solo ? 'vote' : 'pass',
       shownAt: Date.now(),
@@ -85,5 +95,5 @@ export const useGame = create<GameState>((set, get) => ({
   },
 
   reset: () =>
-    set({ deck: [], index: 0, players: [], votes: [], phase: 'vote', skips: 0, solo: false, currentPlayerIdx: 0 }),
+    set({ deck: [], index: 0, players: [], votes: [], history: [], phase: 'vote', skips: 0, solo: false, currentPlayerIdx: 0 }),
 }));

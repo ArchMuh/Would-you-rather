@@ -9,6 +9,7 @@ import { useProgress } from '../store/progress';
 import { useSettings } from '../store/settings';
 import { playSfx } from '../lib/sounds';
 import { hapticMedium, hapticSuccess } from '../lib/haptics';
+import { computeMatches, verdictTier } from '../lib/matchmaking';
 import { evaluateAchievements } from '../lib/achievements';
 import type { RootStackParamList } from '../navigation/types';
 import type { VoteChoice } from '../types';
@@ -83,6 +84,7 @@ export function GameplayScreen({ navigation }: NativeStackScreenProps<RootStackP
   const next = () => {
     playSfx('whoosh');
     if (isLast) {
+      game.archiveRound();
       progress.recordGame({
         id: `g${Date.now()}`,
         mode: game.mode,
@@ -254,17 +256,63 @@ export function GameOverScreen({ navigation }: NativeStackScreenProps<RootStackP
   const total = progress.answered.length;
   const withMaj = progress.answered.filter((a) => a.majorityChoice != null && a.majorityChoice === a.choice).length;
 
+  const matches = useMemo(
+    () => computeMatches(game.players, game.history),
+    [game.players, game.history],
+  );
+  const showMatches = game.kind === 'local' && game.players.filter((p) => p.name.trim()).length >= 2;
+
   return (
     <Background>
-      <View style={styles.center}>
-        <FadeIn>
-          <Text style={{ fontSize: 72, textAlign: 'center' }}>🎉</Text>
-          <Text style={styles.h2}>{t('gameOver')}</Text>
-          <Text style={styles.body}>
-            {t('questionsAnswered')}: {total} · {t('timesWithMajority')}: {withMaj}
-          </Text>
-        </FadeIn>
-      </View>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.center}>
+          <FadeIn>
+            <Text style={{ fontSize: 72, textAlign: 'center' }}>🎉</Text>
+            <Text style={styles.h2}>{t('gameOver')}</Text>
+            <Text style={styles.body}>
+              {t('questionsAnswered')}: {total} · {t('timesWithMajority')}: {withMaj}
+            </Text>
+          </FadeIn>
+
+          {showMatches && (
+            <FadeIn>
+              <View style={styles.matchCard}>
+                <Text style={styles.matchTitle}>💘 {t('matchResults')}</Text>
+                {matches.best ? (
+                  <>
+                    <View style={styles.matchBestRow}>
+                      <AvatarCircle avatar={matches.best.a.avatar} size={44} />
+                      <Text style={styles.matchNames}>
+                        {matches.best.a.name} & {matches.best.b.name}
+                      </Text>
+                      <AvatarCircle avatar={matches.best.b.avatar} size={44} />
+                    </View>
+                    <Text style={styles.matchPct}>{matches.best.pct}%</Text>
+                    <Text style={styles.matchLine}>
+                      {t('matchSameLine', { same: matches.best.same, total: matches.best.total })}
+                    </Text>
+                    <Text style={styles.matchVerdict}>
+                      {t(`matchVerdict${verdictTier(matches.best.pct) === 'perfect' ? 'Perfect' : verdictTier(matches.best.pct) === 'great' ? 'Great' : verdictTier(matches.best.pct) === 'sparks' ? 'Sparks' : 'Opposites'}` as never)}
+                    </Text>
+                    {matches.pairs.slice(1).map((m) => (
+                      <Text key={`${m.a.id}-${m.b.id}`} style={styles.matchPairRow}>
+                        {m.a.name} + {m.b.name} · {m.pct}%
+                      </Text>
+                    ))}
+                    {matches.oddOneOut && (
+                      <Text style={styles.matchOdd}>
+                        {t('matchOddOneOut', { name: matches.oddOneOut.player.name })}
+                      </Text>
+                    )}
+                  </>
+                ) : (
+                  <Text style={styles.matchLine}>{t('matchNoData')}</Text>
+                )}
+              </View>
+            </FadeIn>
+          )}
+        </View>
+      </ScrollView>
       <View style={{ padding: spacing.lg, gap: spacing.md }}>
         <PrimaryButton title={t('playAgain')} onPress={() => { game.reset(); navigation.replace('Modes'); }} />
         <PrimaryButton title={t('backToMenu')} variant="ghost" onPress={() => { game.reset(); navigation.popToTop(); }} />
@@ -296,4 +344,17 @@ const styles = StyleSheet.create({
   playerVoteChoice: { ...typography.bodyBold, fontSize: 18 },
   actionRow: { flexDirection: 'row', justifyContent: 'space-around', marginTop: spacing.xl },
   actionText: { color: colors.textSecondary, ...typography.caption },
+  matchCard: {
+    marginTop: spacing.xl, alignSelf: 'stretch', backgroundColor: colors.bgCard,
+    borderRadius: radius.lg, padding: spacing.lg, borderWidth: 1, borderColor: colors.border,
+    alignItems: 'center',
+  },
+  matchTitle: { color: colors.text, ...typography.h3, marginBottom: spacing.md },
+  matchBestRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  matchNames: { color: colors.text, ...typography.bodyBold, marginHorizontal: spacing.sm },
+  matchPct: { color: colors.primary, fontSize: 44, fontWeight: '900', marginTop: spacing.sm },
+  matchLine: { color: colors.textSecondary, ...typography.caption, marginTop: 4, textAlign: 'center' },
+  matchVerdict: { color: colors.text, ...typography.bodyBold, marginTop: spacing.sm, textAlign: 'center' },
+  matchPairRow: { color: colors.textSecondary, ...typography.body, marginTop: spacing.xs },
+  matchOdd: { color: colors.textMuted, ...typography.caption, marginTop: spacing.md, textAlign: 'center' },
 });

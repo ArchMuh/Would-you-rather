@@ -54,7 +54,7 @@ export const DEEP = build('deep', 'de', [
   ['Have one wish that cannot be for yourself', 'أمنية واحدة مش ممكن تكون ليك', 'One small wish only for yourself', 'أمنية صغيرة ليك انت بس', 3, 2, ['wishes', 'selflessness']],
   ['Know if you are a good person', 'تعرف لو انت إنسان كويس', 'Never doubt that you are', 'ماتشكش أبدًا إنك كويس', 4, 3, ['morality', 'identity']],
   ['Be able to undo one year of aging for someone you love', 'ترجع سنة من عمر حد بتحبه', 'Add one year of wisdom to your own life', 'تضيف سنة حكمة لحياتك انت', 3, 2, ['age', 'love', 'wisdom']],
-  ['Live where everyone knows your name', 'تعيش في مكان الكل يعرف اسمك فيه', 'Live where nobody knows you at all', 'تعيش في مكان محدش يعرفك فيه خالص', 2, 2, ['fame', 'anonymity']],
+  ['Ask your future self one question every year', 'تسأل نفسك في المستقبل سؤال واحد كل سنة', 'Receive one honest letter from your past self every year', 'ييجيلك خطاب صريح من نفسك في الماضي كل سنة', 3, 3, ['time', 'self']],
   ['Have the answer to why bad things happen', 'يكون عندك إجابة ليه الحاجات الوحشة بتحصل', 'Never need the answer', 'متحتاجش الإجابة أبدًا', 4, 3, ['suffering', 'meaning']],
   ['Be able to feel everything deeply', 'تحس بكل حاجة بعمق', 'Feel nothing at all but be at peace', 'متحسش بأي حاجة بس تكون في سلام', 5, 3, ['emotions', 'peace']],
   ['Know if you made the right big choices', 'تعرف لو اختياراتك الكبيرة كانت صح', 'Be at peace not knowing', 'تكون في سلام من غير معرفة', 4, 3, ['choices', 'peace']],
