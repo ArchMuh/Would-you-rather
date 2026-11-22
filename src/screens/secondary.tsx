@@ -261,6 +261,32 @@ export function DailyScreen({ navigation }: NativeStackScreenProps<RootStackPara
 export function SettingsScreen({ navigation }: NativeStackScreenProps<RootStackParamList, 'Settings'>) {
   const { t, language } = useT();
   const settings = useSettings();
+  const [updateStatus, setUpdateStatus] = useState<'idle' | 'checking' | 'found' | 'ready' | 'none' | 'error'>('idle');
+
+  const checkForUpdates = async () => {
+    if (updateStatus === 'checking') return;
+    setUpdateStatus('checking');
+    try {
+      const result = await Updates.checkForUpdateAsync();
+      if (!result.isAvailable) {
+        setUpdateStatus('none');
+        return;
+      }
+      setUpdateStatus('found');
+      await Updates.fetchUpdateAsync();
+      setUpdateStatus('ready');
+      setTimeout(() => void Updates.reloadAsync(), 1200);
+    } catch {
+      setUpdateStatus('error');
+    }
+  };
+
+  const updateMessage =
+    updateStatus === 'found' ? t('updateFound')
+    : updateStatus === 'ready' ? t('updateReady')
+    : updateStatus === 'none' ? t('updateNone')
+    : updateStatus === 'error' ? t('updateError')
+    : '';
 
   const switchLanguage = async () => {
     const next = language === 'en' ? 'ar' : 'en';
@@ -280,6 +306,17 @@ export function SettingsScreen({ navigation }: NativeStackScreenProps<RootStackP
         <ToggleRow label={t('music')} value={settings.music} onChange={(v) => { settings.setMusic(v); syncMusic(); }} />
         <ToggleRow label={t('haptics')} value={settings.haptics} onChange={settings.setHaptics} />
 
+        <View style={{ height: spacing.lg }} />
+        <PrimaryButton
+          title={updateStatus === 'checking' ? t('updateChecking') : t('checkUpdates')}
+          variant="ghost"
+          onPress={() => void checkForUpdates()}
+          disabled={updateStatus === 'checking'}
+        />
+        {updateMessage ? <Text style={styles.updateStatus}>{updateMessage}</Text> : null}
+        <Text style={styles.updateStatus}>
+          {t('updateCurrent')}: {Updates.updateId ? Updates.updateId.slice(0, 8) : '—'}
+        </Text>
         <View style={{ height: spacing.lg }} />
         <PrimaryButton
           title={t('resetProgress')}
@@ -333,4 +370,5 @@ const styles = StyleSheet.create({
   toggleLabel: { color: colors.text, ...typography.body },
   langValue: { color: colors.primary, ...typography.bodyBold },
   about: { color: colors.textMuted, ...typography.caption, textAlign: 'center' },
+  updateStatus: { color: colors.textSecondary, ...typography.caption, textAlign: 'center', marginTop: spacing.sm },
 });

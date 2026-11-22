@@ -181,6 +181,13 @@ const en = {
   confirm: 'Confirm',
   about: 'About',
   version: 'Version',
+  checkUpdates: 'Check for updates',
+  updateChecking: 'Checking…',
+  updateFound: 'Update found! Downloading…',
+  updateReady: 'Update ready. Restarting…',
+  updateNone: 'You are on the latest version',
+  updateError: 'Could not check. Try again later',
+  updateCurrent: 'Current update',
   restartToApply: 'Restart the app to apply the layout direction.',
 
   // Age gate

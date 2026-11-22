@@ -170,6 +170,13 @@ const ar: Strings = {
   confirm: 'تأكيد',
   about: 'عن التطبيق',
   version: 'الإصدار',
+  checkUpdates: 'دوّر على تحديث',
+  updateChecking: 'بندوّر…',
+  updateFound: 'في تحديث! بننزّله…',
+  updateReady: 'التحديث جاهز. بنعيد التشغيل…',
+  updateNone: 'انت على آخر إصدار',
+  updateError: 'مش قادرين ندوّر دلوقتي. جرب تاني بعدين',
+  updateCurrent: 'التحديث الحالي',
   restartToApply: 'أعد تشغيل التطبيق لتطبيق اتجاه العرض.',
 
   ageTitle: '+18 فقط',
