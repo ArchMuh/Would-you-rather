@@ -27,7 +27,7 @@ jobs:
       - run: npx expo prebuild --platform android --no-install
       # R8 needs more JVM memory than the RN defaults on CI runners
       - name: Bump Gradle JVM memory
-        run: echo 'org.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError' >> android/gradle.properties
+        run: printf '\norg.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError\n' >> android/gradle.properties
       # Embed the production update channel so OTA (eas update) reaches this build deterministically
       - name: Set OTA channel to production
         run: |
