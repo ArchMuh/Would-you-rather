@@ -39,7 +39,8 @@ function modePool(mode: GameModeId, custom: Question[]): Question[] {
     case 'quick':
     case 'daily':
     case 'classic':
-      return ALL_QUESTIONS; // classic mixes everything
+      // Ungated modes never draw from gated decks (adult / heat)
+      return ALL_QUESTIONS.filter((q) => q.category !== 'adult' && q.category !== 'heat');
     default:
       return ALL_QUESTIONS.filter((q) => q.category === mode);
   }
@@ -63,6 +64,23 @@ export function buildDeck(filter: DeckFilter): Question[] {
   const fresh = pool.filter((q) => !exclude.has(q.id));
   // If everything was played recently, fall back to the full pool.
   const source = fresh.length >= filter.count ? fresh : pool;
+  if (filter.mode === 'heat') {
+    // Ramp: order by intensity ascending (flirty -> sensual -> desire -> invitation),
+    // shuffling within each intensity level so sessions vary.
+    return source
+      .map((q) => ({ q, key: q.intensity + Math.random() }))
+      .sort((a, b) => a.key - b.key)
+      .map((x) => x.q)
+      .slice(0, filter.count);
+  }
+  if (filter.mode === 'adult') {
+    // Weight the adult deck toward arousing 'intimate'-tagged questions (~2x)
+    return source
+      .map((q) => ({ q, key: Math.random() * (q.tags.includes('intimate') ? 1 : 2) }))
+      .sort((a, b) => a.key - b.key)
+      .map((x) => x.q)
+      .slice(0, filter.count);
+  }
   return shuffle(source).slice(0, filter.count);
 }
 
@@ -71,7 +89,7 @@ export function dailyQuestion(dateKey: string, custom: Question[]): Question {
   let seed = 0;
   for (let i = 0; i < dateKey.length; i++) seed = (seed * 31 + dateKey.charCodeAt(i)) | 0;
   const rand = seededRandom(seed);
-  const pool = ALL_QUESTIONS.filter((q) => q.category !== 'adult');
+  const pool = ALL_QUESTIONS.filter((q) => q.category !== 'adult' && q.category !== 'heat');
   return pool[Math.floor(rand() * pool.length)];
 }
 

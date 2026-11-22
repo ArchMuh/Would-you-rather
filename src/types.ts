@@ -7,7 +7,7 @@ export type CategoryId =
   | 'deep'
   | 'extreme'
   | 'funny'
-  | 'adult';
+  | 'adult' | 'heat';
 
 export type GameModeId =
   | 'classic'
@@ -16,7 +16,7 @@ export type GameModeId =
   | 'deep'
   | 'extreme'
   | 'funny'
-  | 'adult'
+  | 'adult' | 'heat'
   | 'custom'
   | 'quick'
   | 'daily';

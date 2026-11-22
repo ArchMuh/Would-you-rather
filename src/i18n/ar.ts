@@ -47,6 +47,8 @@ const ar: Strings = {
   mode_funny_sub: 'هزار خالص',
   mode_adult: '+18',
   mode_adult_sub: 'مواضيع للكبار فقط',
+  mode_heat: 'حرارة',
+  mode_heat_sub: 'رحلة للكابلز: مغازلة لإحساس لشوق لدعوة (18+)',
   mode_custom: 'مخصص',
   mode_custom_sub: 'العب بأسئلتك انت',
 

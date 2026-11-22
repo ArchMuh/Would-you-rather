@@ -47,6 +47,8 @@ const en = {
   mode_funny_sub: 'Pure ridiculousness',
   mode_adult: '18+',
   mode_adult_sub: 'Mature themes only',
+  mode_heat: 'Heat',
+  mode_heat_sub: 'A couples ramp: flirty to sensual to desire to invitation (18+)',
   mode_custom: 'Custom',
   mode_custom_sub: 'Play your own questions',
 

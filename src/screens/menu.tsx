@@ -27,7 +27,7 @@ export function MainMenuScreen({ navigation }: NativeStackScreenProps<RootStackP
 
         <View style={{ height: spacing.lg }} />
         <FadeIn delay={80}>
-          <PrimaryButton title={`⚡ ${t('quickPlay')}`} onPress={() => navigation.navigate('PlayerSetup', { mode: 'quick' })} />
+          <PrimaryButton title={`⚡ ${t('quickPlay')}`} onPress={() => navigation.navigate('Modes')} />
         </FadeIn>
 
         <View style={{ height: spacing.md }} />
@@ -72,6 +72,7 @@ const MODES: { id: GameModeId; emoji: string }[] = [
   { id: 'classic', emoji: '🎲' },
   { id: 'friends', emoji: '🎉' },
   { id: 'couples', emoji: '💜' },
+  { id: 'heat', emoji: '🌶️' },
   { id: 'deep', emoji: '🌌' },
   { id: 'extreme', emoji: '🔥' },
   { id: 'funny', emoji: '😂' },
@@ -85,7 +86,7 @@ export function ModeSelectionScreen({ navigation }: NativeStackScreenProps<RootS
   const customCount = useProgress((s) => s.customQuestions.length);
 
   const open = (mode: GameModeId) => {
-    if (mode === 'adult' && !adultVerified) {
+    if ((mode === 'adult' || mode === 'heat') && !adultVerified) {
       navigation.navigate('AgeGate', { mode });
       return;
     }
@@ -106,7 +107,7 @@ export function ModeSelectionScreen({ navigation }: NativeStackScreenProps<RootS
                   ? `${t('mode_custom_sub')} · ${customCount}`
                   : t(`mode_${m.id}_sub` as never)
               }
-              locked={m.id === 'adult' && !adultVerified}
+              locked={(m.id === 'adult' || m.id === 'heat') && !adultVerified}
               onPress={() => open(m.id)}
             />
           </FadeIn>

@@ -6,6 +6,7 @@ import { DEEP } from './deep';
 import { EXTREME } from './extreme';
 import { FUNNY } from './funny';
 import { ADULT } from './adult';
+import { HEAT } from './heat';
 
 export const ALL_QUESTIONS: Question[] = [
   ...CLASSIC,
@@ -15,6 +16,7 @@ export const ALL_QUESTIONS: Question[] = [
   ...EXTREME,
   ...FUNNY,
   ...ADULT,
+  ...HEAT,
 ];
 
 export const QUESTION_COUNT = ALL_QUESTIONS.length;
